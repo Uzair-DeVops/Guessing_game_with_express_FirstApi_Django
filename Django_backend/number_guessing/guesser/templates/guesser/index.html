@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Number Generator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 50px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+      #guess-number {
+        font-size: 24px;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Guess Number</h1>
+    <input id="guess-number" type="number" placeholder="Enter a number" />
+    <button id="btn">Guess</button>
+    <p id="result"></p> 
+
+    <script>
+      document.getElementById("btn").addEventListener("click", function () {
+        const guessed_number = document.getElementById("guess-number").value;
+        const data = { number: parseInt(guessed_number) };
+
+        fetch('http://127.0.0.1:8000/api/guess/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('result').textContent = data.message; 
+        })
+        .catch(error => {
+            document.getElementById('result').textContent = 'Error occurred: ' + error.message;
+        });
+      });
+    </script>
+  </body>
+</html>
